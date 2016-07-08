@@ -8,7 +8,12 @@
 
 
 (defn index-routes []
-  ["/index" (yada/handler channels.index/index)])
+  ["/index" (yada/resource
+              {:methods
+               {:get
+                {:produces {:media-type #{"application/edn;q=0.9"
+                                          "application/json"}}
+                 :response channels.index/index}}})])
 
 (defn hello-routes []
   ["/hello" (yada/handler "Hello World!\n")])
