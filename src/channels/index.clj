@@ -1,8 +1,6 @@
 (ns channels.index)
 
 
-
-
 (def index {:humans "This is an index."
             :channels [{:humans "Minimum Viable Channel"
                         :url-path-segments "/mvc"

@@ -4,6 +4,7 @@
             [bidi.vhosts :refer [make-handler vhosts-model]]
             [bidi.bidi :refer [tag]]
             [yada.resources.webjar-resource :refer [new-webjar-resource]]
+            [channels.index :as index]
             ))
 
 
@@ -13,19 +14,24 @@
                {:get
                 {:produces {:media-type #{"application/edn;q=0.9"
                                           "application/json"}}
-                 :response channels.index/index}}})])
+                 :response index/index}}})])
 
 (defn hello-routes []
   ["/hello" (yada/handler "Hello World!\n")])
 
+(defn make-routes []
+  ["/channels" [["/index" (yada/resource
+                            {:methods
+                             {:get
+                              {:produces {:media-type #{"application/edn;q=0.9"
+                                                        "application/json"}}
+                               :response index/index}}})]]])
+
 (def routes
   [""
    [
-    ;; Hello World!
-    (hello-routes)
-    (index-routes)
-
-    ["/api" (-> (hello-routes)
+    (make-routes)
+    ["/api" (-> (make-routes)
                 ;; Wrap this route structure in a Swagger
                 ;; wrapper. This introspects the data model and
                 ;; provides a swagger.json file, used by Swagger UI
