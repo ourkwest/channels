@@ -3,14 +3,18 @@
 
 (def index {:humans "This is an index."
             :channels [{:humans "Minimum Viable Channel"
-                        :url-path-segments "/mvc"
+                        :path "/mvc"
                         :endpoints [{:humans "Write here"
                                      :type "sink"
-                                     :url-path-segments "/write"
+                                     :path "/write"
                                      :authentication [{:type "none"}]
                                      :identification [{:type "none"}]}
                                     {:humans "Read here"
                                      :type "source"
-                                     :url-path-segments "/read"
+                                     :path "/read"
                                      :authentication [{:type "none"}]
                                      :identification [{:type "none"}]}]}]})
+
+(defn index-for [& channels]
+  {:humans "This is an index."
+   :channels channels})

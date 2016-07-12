@@ -5,6 +5,7 @@
             [bidi.bidi :refer [tag]]
             [yada.resources.webjar-resource :refer [new-webjar-resource]]
             [channels.index :as index]
+            [channels.mvc :as mvc]
             ))
 
 
@@ -25,7 +26,8 @@
                              {:get
                               {:produces {:media-type #{"application/edn;q=0.9"
                                                         "application/json"}}
-                               :response index/index}}})]]])
+                               :response (index/index-for mvc/description)}}})]
+                mvc/routes]])
 
 (def routes
   [""
@@ -61,6 +63,7 @@
            routes])
         listener (yada/listener vhosts-model {:port port})]
     (infof "Started web-server on port %s" (:port listener))
+    (println "TODO: proper logging!")
     (println "TODO: proper logging!")
     (println "http://localhost:3001/index")
     listener))

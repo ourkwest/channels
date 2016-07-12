@@ -45,9 +45,12 @@
       - id
     - known child ids...?
       - id
-    - timestamp (ISO8601 with Timestamp)
+    - timestamp (ISO8601 with Timezone)
     - mime type
     - content
+    - dimensions...
+      - key
+      - numeric(?) value
 
 
 
