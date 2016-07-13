@@ -6,27 +6,22 @@
             [yada.resources.webjar-resource :refer [new-webjar-resource]]
             [channels.index :as index]
             [channels.mvc :as mvc]
+            [channels.server :as server]
+            [com.stuartsierra.component :as c]
+            [cheshire.core :as json]
             ))
 
 
-(defn index-routes []
-  ["/index" (yada/resource
-              {:methods
-               {:get
-                {:produces {:media-type #{"application/edn;q=0.9"
-                                          "application/json"}}
-                 :response index/index}}})])
-
-(defn hello-routes []
-  ["/hello" (yada/handler "Hello World!\n")])
+(defmethod yada.body/render-map "text/plain"
+  [m _]
+  (-> (json/encode m {:pretty true})))
 
 (defn make-routes []
   ["/channels" [["/index" (yada/resource
-                            {:methods
+                            {:produces #{"text/plain"}
+                             :methods
                              {:get
-                              {:produces {:media-type #{"application/edn;q=0.9"
-                                                        "application/json"}}
-                               :response (index/index-for mvc/description)}}})]
+                              {:response (index/index-for mvc/description)}}})]
                 mvc/routes]])
 
 (def routes
@@ -53,17 +48,12 @@
 
     [true (yada/handler nil)]]])
 
-
+(defn new-system []
+  (c/system-map
+    :port 3000
+    :routes routes
+    :server (c/using (server/new-server)
+                     [:port :routes])))
 
 (defn -main [& args]
-  (let [port 3001
-        vhosts-model
-        (vhosts-model
-          [{:scheme :http :host (format "localhost:%d" port)}
-           routes])
-        listener (yada/listener vhosts-model {:port port})]
-    (infof "Started web-server on port %s" (:port listener))
-    (println "TODO: proper logging!")
-    (println "TODO: proper logging!")
-    (println "http://localhost:3001/index")
-    listener))
+  (c/start (new-system)))

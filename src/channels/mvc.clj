@@ -4,6 +4,8 @@
             [clojure.java.io :as io]))
 
 
+(def messages (atom []))
+
 (def description {:humans "Minimum Viable Channel"
                   :path "/mvc"
                   :endpoints [{:humans "Write here"
@@ -62,8 +64,11 @@
           :response
           (fn [ctx]
             (println ctx)
-            (println (or (get-in ctx [:parameters :form])
-                         (:body ctx)))
+            (let [message (or (get-in ctx [:parameters :form])
+                              (:body ctx))]
+              (println message)
+              (swap! messages conj message))
+
             "okay.")}}})]
     ["/read"
      (yada/resource
@@ -71,4 +76,8 @@
         {:get
          {:produces {:media-type #{"application/edn;q=0.9"
                                    "application/json"}}
-          :response "TODO..."}}})]]])
+          :response (fn [ctx]
+
+                      (sort-by :timsetamp @messages)
+
+                      )}}})]]])
