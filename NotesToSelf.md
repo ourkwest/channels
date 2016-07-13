@@ -45,7 +45,8 @@
       - id
     - known child ids...?
       - id
-    - timestamp (ISO8601 with Timezone)
+    - created timestamp (ISO 8601 with Timezone)
+    - updated timestamp (or maybe unix time?)
     - mime type
     - content
     - dimensions...
@@ -58,3 +59,17 @@
 - hooks?
 - ids integral to messages, generated with message, globally unique
 - mvp - open public chatroom
+
+
+TODO:
+ - updated timestamps on messages
+ - ISO 8601 format for timestamps!!!
+ - SPA:
+    - index
+      - read index
+      - render useful info from index
+      - select MVC from index (link opens new panel)
+    - MVC
+      - render scrollable messages view
+      - reply to messages directly
+      - compose new message
